@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checklist de Figurino 2025</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .datetime {
+      text-align: center;
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+    }
+
+    li:last-child {
+      border-bottom: none;
+    }
+
+    .checked {
+      text-decoration: line-through;
+      color: #999;
+    }
+
+    .history {
+      margin-top: 30px;
+      padding: 10px;
+      background: #f9fafb;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+    }
+
+    .history h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 12px;
+    }
+
+    .history-item img {
+      width: 80px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .camera {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    video, canvas {
+      width: 100%;
+      max-width: 100%;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1e40af;
+    }
+
+    #photo {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Checklist de Figurino 2025</h1>
+    <div class="datetime" id="datetime"></div>
+
+    
+ 
+      <ul id="checklist">
+        <li><input type="checkbox"> Jaqueta branca</li>
+        <li><input type="checkbox"> Jaqueta preta</li>
+        <li><input type="checkbox"> Sapatos engraxados</li>
+        <li><input type="checkbox"> Camisa social de manga longa</li>
+        <li><input type="checkbox"> Calça preta</li>
+        <li><input type="checkbox"> Luvas</li>
+        <li><input type="checkbox"> Óculos</li>
+        <li><input type="checkbox"> Outros acessórios</li>
+      </ul>
+    <div class="history" id="history">
+      <h2>Histórico de Checklist:</h2>
+      <div id="historyList"></div>
+    </div>
+
+    <div class="camera">
+      <h2>Câmera - Foto Automática</h2>
+      <video id="video" autoplay playsinline></video>
+      <button id="capture">Capturar Foto Manual</button>
+      <canvas id="canvas" style="display:none;"></canvas>
+      <img id="photo" alt="Foto Capturada">
+    </div>
+  </div>
+
+  <script>
+    const datetimeEl = document.getElementById("datetime");
+    const checklist = document.getElementById("checklist");
+    const historyList = document.getElementById("historyList");
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const photo = document.getElementById("photo");
+    const captureBtn = document.getElementById("capture");
+
+    function updateDateTime() {
+      const now = new Date();
+      const date = now.toLocaleDateString("pt-BR");
+      const time = now.toLocaleTimeString("pt-BR");
+      datetimeEl.textContent = `Data: ${date} | Hora: ${time}`;
+    }
+
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+    // Acessar câmera
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        alert("Erro ao acessar a câmera: " + err);
+      });
+
+    function capturarFoto() {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const context = canvas.getContext("2d");
+      context.drawImage(video, 0, 0);
+      return canvas.toDataURL("image/png");
+    }
+
+    // Botão manual
+    captureBtn.addEventListener("click", () => {
+      const dataURL = capturarFoto();
+      photo.src = dataURL;
+      photo.style.display = "block";
+    });
+
+    // Checklist + foto automática + histórico
+    checklist.addEventListener("change", function(e) {
+      if (e.target.tagName === "INPUT" && e.target.type === "checkbox") {
+        const item = e.target.parentElement;
+        const now = new Date().toLocaleTimeString("pt-BR");
+        const text = item.textContent.trim();
+
+        if (e.target.checked) {
+          item.classList.add("checked");
+
+          // Tira foto
+          const dataURL = capturarFoto();
+
+          // Adiciona ao histórico
+          const div = document.createElement("div");
+          div.classList.add("history-item");
+
+          const img = document.createElement("img");
+          img.src = dataURL;
+          img.alt = "Foto do item";
+
+          const info = document.createElement("span");
+          info.textContent = `✔️ ${text} às ${now}`;
+
+          div.appendChild(img);
+          div.appendChild(info);
+          historyList.appendChild(div);
+        } else {
+          item.classList.remove("checked");
+        }
+      }
+    });
+  </script>
+</body>
+</html>
