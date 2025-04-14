@@ -120,6 +120,7 @@
   </style>
 </head>
 <body>
+  <button id="toggleCamera">Trocar Câmera</button>
   <div class="container">
     <h1>Checklist de Figurino 2025</h1>
     <div class="datetime" id="datetime"></div>
@@ -158,26 +159,45 @@
     const canvas = document.getElementById("canvas");
     const photo = document.getElementById("photo");
     const captureBtn = document.getElementById("capture");
-
+    const toggleCameraBtn = document.getElementById("toggleCamera");
+  
+    let usingFrontCamera = false;
+    let currentStream;
+  
     function updateDateTime() {
       const now = new Date();
       const date = now.toLocaleDateString("pt-BR");
       const time = now.toLocaleTimeString("pt-BR");
       datetimeEl.textContent = `Data: ${date} | Hora: ${time}`;
     }
-
+  
     setInterval(updateDateTime, 1000);
     updateDateTime();
-
-    // Acessar câmera
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then(stream => {
+  
+    async function iniciarCamera(facingMode = "environment") {
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+      }
+  
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: facingMode }
+        });
+  
+        currentStream = stream;
         video.srcObject = stream;
-      })
-      .catch(err => {
+      } catch (err) {
         alert("Erro ao acessar a câmera: " + err);
-      });
-
+      }
+    }
+  
+    toggleCameraBtn.addEventListener("click", () => {
+      usingFrontCamera = !usingFrontCamera;
+      iniciarCamera(usingFrontCamera ? "user" : "environment");
+    });
+  
+    iniciarCamera();
+  
     function capturarFoto() {
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
@@ -185,38 +205,34 @@
       context.drawImage(video, 0, 0);
       return canvas.toDataURL("image/png");
     }
-
-    // Botão manual
+  
     captureBtn.addEventListener("click", () => {
       const dataURL = capturarFoto();
       photo.src = dataURL;
       photo.style.display = "block";
     });
-
-    // Checklist + foto automática + histórico
+  
     checklist.addEventListener("change", function(e) {
       if (e.target.tagName === "INPUT" && e.target.type === "checkbox") {
         const item = e.target.parentElement;
         const now = new Date().toLocaleTimeString("pt-BR");
         const text = item.textContent.trim();
-
+  
         if (e.target.checked) {
           item.classList.add("checked");
-
-          // Tira foto
+  
           const dataURL = capturarFoto();
-
-          // Adiciona ao histórico
+  
           const div = document.createElement("div");
           div.classList.add("history-item");
-
+  
           const img = document.createElement("img");
           img.src = dataURL;
           img.alt = "Foto do item";
-
+  
           const info = document.createElement("span");
           info.textContent = `✔️ ${text} às ${now}`;
-
+  
           div.appendChild(img);
           div.appendChild(info);
           historyList.appendChild(div);
@@ -226,5 +242,6 @@
       }
     });
   </script>
+  
 </body>
 </html>
