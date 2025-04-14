@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Checklist de Figurino</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+      background: #111;
+      color: #fff;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    #clock {
+      font-size: 2em;
+      text-align: center;
+      background: #000;
+      color: #0f0;
+      padding: 10px;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #0f0;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    li {
+      background: #222;
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .checked {
+      background: #004400;
+    }
+
+    .not-found {
+      background: #440000;
+    }
+
+    label {
+      flex: 1;
+    }
+
+    button {
+      margin-left: 10px;
+      padding: 5px 10px;
+      background: #0f0;
+      border: none;
+      border-radius: 5px;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0c0;
+    }
+
+    #historico, #resumo {
+      max-width: 600px;
+      margin: 30px auto;
+      background: #1a1a1a;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,255,0,0.1);
+    }
+
+    .hist-item {
+      font-size: 0.9em;
+      padding: 5px 0;
+      border-bottom: 1px solid #333;
+    }
+
+    #resumo {
+      color: #ccc;
+    }
+
+    #resumo .ok {
+      color: #0f0;
+    }
+
+    #resumo .faltando {
+      color: #f33;
+    }
+  </style>
+</head>
+<body>
+    <div style="text-align:center; margin: 10px 0;">
+        <button onclick="salvarPDF()" style="background:#0f0; color:#000; font-weight:bold; padding:10px 20px; border:none; border-radius:10px; cursor:pointer;">
+          📄 Salvar como PDF
+        </button>
+      </div>
+      
+  <h1>Checklist de Figurino 2025</h1>
+  <div id="clock">00:00:00</div>
+
+  <ul id="checklist">
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Calça social preta</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Camisa branca manga longa</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Camisa regata</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Camisa de brilho manga curta</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Chapéu militar</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Chapéu gangster</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Acessórios diversos</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+  </ul>
+  <ul id="checklist">
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Calça social preta</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Camisa branca manga longa</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Camisa regata</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Camisa de brilho manga curta</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Chapéu militar</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Chapéu gangster</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Acessórios diversos</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Meia preta</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Meias brancas</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Óculos</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Luvas</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Sapatos engraxados antes do show</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Jaqueta jeans</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Jaqueta preta</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Jaqueta branca</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Casaco Jumbie Vinho</label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Casaco Jumbie Grafite </label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+    <li>
+      <label><input type="checkbox" onchange="registrar(this)"> Casaco Jumbie Azul Marinho Sadomu Botão dourado </label>
+      <button onclick="naoAchado(this)">❌ Não achei</button>
+    </li>
+  </ul>
+  <h2>🎬 Figurinos por Sequência</h2>
+<ul id="figurinos-sequencia">
+  <li>
+    <label><input type="checkbox" onchange="registrar(this)"> Figurino de Abertura Novo</label>
+    <button onclick="naoAchado(this)">❌ Não achei</button>
+  </li>
+  <li>
+    <label><input type="checkbox" onchange="registrar(this)"> Figurino 2 - Sequência</label>
+    <button onclick="naoAchado(this)">❌ Não achei</button>
+  </li>
+  <li>
+    <label><input type="checkbox" onchange="registrar(this)"> Figurino 3 - Dance em Du</label>
+    <button onclick="naoAchado(this)">❌ Não achei</button>
+  </li>
+  <li>
+    <label><input type="checkbox" onchange="registrar(this)"> Figurino 4 - Brilhante Intro</label>
+    <button onclick="naoAchado(this)">❌ Não achei</button>
+  </li>
+</ul>
+  <div id="historico">
+    <h2>Histórico</h2>
+    <div id="historico-lista"></div>
+  </div>
+
+  <div id="resumo">
+    <h2>Resumo Final</h2>
+    <p class="ok" id="total-ok">Itens encontrados: 0</p>
+    <p class="faltando" id="total-faltando">Itens não encontrados: 0</p>
+  </div>
+
+  <script>
+    const clock = document.getElementById('clock');
+    const historicoLista = document.getElementById('historico-lista');
+    const totalOk = document.getElementById('total-ok');
+    const totalFaltando = document.getElementById('total-faltando');
+
+    // Relógio digital
+    function atualizarRelogio() {
+      const agora = new Date();
+      const hora = agora.toLocaleTimeString('pt-BR');
+      clock.textContent = hora;
+    }
+    setInterval(atualizarRelogio, 1000);
+    atualizarRelogio();
+
+    // Formatador de data e hora
+    function formatarDataHora() {
+      const agora = new Date();
+      return agora.toLocaleString('pt-BR', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+    }
+
+    // Histórico
+    function registrar(checkbox) {
+      const item = checkbox.closest('li');
+      item.classList.remove('not-found');
+      if (checkbox.checked) {
+        item.classList.add('checked');
+        const label = checkbox.parentElement.textContent.trim();
+        const dataHora = formatarDataHora();
+        const div = document.createElement('div');
+        div.className = 'hist-item';
+        div.textContent = `✔️ ${label} — ${dataHora}`;
+        historicoLista.prepend(div);
+      } else {
+        item.classList.remove('checked');
+      }
+      atualizarResumo();
+    }
+
+    function naoAchado(botao) {
+      const item = botao.closest('li');
+      item.classList.add('not-found');
+      item.querySelector('input[type="checkbox"]').checked = false;
+      const label = item.querySelector('label').textContent.trim();
+      const dataHora = formatarDataHora();
+      const div = document.createElement('div');
+      div.className = 'hist-item';
+      div.textContent = `❌ NÃO ENCONTRADO: ${label} — ${dataHora}`;
+      historicoLista.prepend(div);
+      atualizarResumo();
+    }
+
+    function atualizarResumo() {
+      const itens = document.querySelectorAll('#checklist li');
+      let ok = 0;
+      let faltando = 0;
+
+      itens.forEach(li => {
+        if (li.classList.contains('checked')) ok++;
+        else if (li.classList.contains('not-found')) faltando++;
+      });
+
+      totalOk.textContent = `Itens encontrados: ${ok}`;
+      totalFaltando.textContent = `Itens não encontrados: ${faltando}`;
+    }
+
+    function salvarPDF() {
+  const element = document.body;
+  const opt = {
+    margin:       0.5,
+    filename:     `checklist-figurino-${new Date().toLocaleDateString('pt-BR')}.pdf`,
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+
+  html2pdf().from(element).set(opt).save();
+}
+
+  </script>
+</body>
+</html>
