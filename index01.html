@@ -98,6 +98,11 @@
     #resumo .faltando {
       color: #f33;
     }
+
+    .negativo {
+      color: #f33; /* Vermelho */
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -107,7 +112,7 @@
         </button>
       </div>
       
-  <h1>Checklist de Figurino 2025</h1>
+  <h1></h1>
   <div id="clock">00:00:00</div>
 
   <ul id="checklist">
@@ -142,25 +147,7 @@
   </ul>
 
   </ul>
-  <h2>🎬 Figurinos por Sequência</h2>
-<ul id="figurinos-sequencia">
-  <li>
-    <label><input type="checkbox" onchange="registrar(this)"> Figurino de Abertura Novo</label>
-    <button onclick="naoAchado(this)">❌ Não achei</button>
-  </li>
-  <li>
-    <label><input type="checkbox" onchange="registrar(this)"> Figurino 2 - Sequência</label>
-    <button onclick="naoAchado(this)">❌ Não achei</button>
-  </li>
-  <li>
-    <label><input type="checkbox" onchange="registrar(this)"> Figurino 3 - Dance em Du</label>
-    <button onclick="naoAchado(this)">❌ Não achei</button>
-  </li>
-  <li>
-    <label><input type="checkbox" onchange="registrar(this)"> Figurino 4 - Brilhante Intro</label>
-    <button onclick="naoAchado(this)">❌ Não achei</button>
-  </li>
-</ul>
+ 
   <div id="historico">
     <h2>Histórico</h2>
     <div id="historico-lista"></div>
@@ -171,6 +158,58 @@
     <p class="ok" id="total-ok">Itens encontrados: 0</p>
     <p class="faltando" id="total-faltando">Itens não encontrados: 0</p>
   </div>
+
+  <div id="avaliacao">
+  <h2>Avaliação do Show</h2>
+  <form id="form-avaliacao">
+    <label>
+      <input type="checkbox" onchange="registrarAvaliacao(this, 'Coreografia alinhada')"> Coreografia alinhada
+    </label><br>
+    <label>
+      <input type="checkbox" onchange="registrarAvaliacao(this, 'Sincronia')"> Sincronia
+    </label><br>
+    <label>
+      <input type="checkbox" onchange="registrarAvaliacao(this, 'Organização final')"> Organização final
+    </label><br>
+    <label>
+      <input type="checkbox" onchange="registrarAvaliacao(this, 'Desempenho na coreografia')"> Desempenho na coreografia
+    </label>
+  </form>
+  <button onclick="salvarAvaliacaoCheckbox()" style="margin-top: 10px; background: #0f0; color: #000; font-weight: bold; padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer;">Salvar Avaliação</button>
+</div>
+
+<script>
+  const avaliacoesSelecionadas = [];
+
+  function registrarAvaliacao(checkbox, descricao) {
+    const label = checkbox.parentElement;
+    if (checkbox.checked) {
+      avaliacoesSelecionadas.push(descricao);
+      label.classList.remove('negativo'); // Remove sinalização negativa
+    } else {
+      const index = avaliacoesSelecionadas.indexOf(descricao);
+      if (index > -1) {
+        avaliacoesSelecionadas.splice(index, 1);
+      }
+      label.classList.add('negativo'); // Adiciona sinalização negativa
+    }
+  }
+
+  function salvarAvaliacaoCheckbox() {
+    if (avaliacoesSelecionadas.length > 0) {
+      const dataHora = formatarDataHora();
+      const div = document.createElement('div');
+      div.className = 'hist-item';
+      div.textContent = `📝 Avaliação registrada em ${dataHora}: ${avaliacoesSelecionadas.join(', ')}`;
+      historicoLista.prepend(div);
+      alert('Avaliação salva com sucesso!');
+      document.getElementById('form-avaliacao').reset(); // Reseta os checkboxes
+      avaliacoesSelecionadas.length = 0; // Limpa o array
+    } else {
+      alert('Por favor, selecione pelo menos um item para avaliar.');
+    }
+  }
+</script>
 
   <script>
     const clock = document.getElementById('clock');
