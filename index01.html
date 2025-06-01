@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checklist de Figurino</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -100,19 +101,20 @@
     }
 
     .negativo {
-      color: #f33; /* Vermelho */
+      color: #f33;
       font-weight: bold;
     }
   </style>
 </head>
 <body>
-    <div style="text-align:center; margin: 10px 0;">
-        <button onclick="salvarPDF()" style="background:#0f0; color:#000; font-weight:bold; padding:10px 20px; border:none; border-radius:10px; cursor:pointer;">
-          📄 Salvar como PDF
-        </button>
-      </div>
-      
-  <h1></h1>
+
+  <div style="text-align:center; margin: 10px 0;">
+    <button onclick="salvarPDF()" style="background:#0f0; color:#000; font-weight:bold; padding:10px 20px; border:none; border-radius:10px; cursor:pointer;">
+      📄 Salvar como PDF
+    </button>
+  </div>
+
+  <h1>Checklist de Figurino</h1>
   <div id="clock">00:00:00</div>
 
   <ul id="checklist">
@@ -146,8 +148,6 @@
     </li>
   </ul>
 
-  </ul>
- 
   <div id="historico">
     <h2>Histórico</h2>
     <div id="historico-lista"></div>
@@ -160,64 +160,31 @@
   </div>
 
   <div id="avaliacao">
-  <h2>Avaliação do Show</h2>
-  <form id="form-avaliacao">
-    <label>
-      <input type="checkbox" onchange="registrarAvaliacao(this, 'Coreografia alinhada')"> Coreografia alinhada
-    </label><br>
-    <label>
-      <input type="checkbox" onchange="registrarAvaliacao(this, 'Sincronia')"> Sincronia
-    </label><br>
-    <label>
-      <input type="checkbox" onchange="registrarAvaliacao(this, 'Organização final')"> Organização final
-    </label><br>
-    <label>
-      <input type="checkbox" onchange="registrarAvaliacao(this, 'Desempenho na coreografia')"> Desempenho na coreografia
-    </label>
-  </form>
-  <button onclick="salvarAvaliacaoCheckbox()" style="margin-top: 10px; background: #0f0; color: #000; font-weight: bold; padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer;">Salvar Avaliação</button>
-</div>
-
-<script>
-  const avaliacoesSelecionadas = [];
-
-  function registrarAvaliacao(checkbox, descricao) {
-    const label = checkbox.parentElement;
-    if (checkbox.checked) {
-      avaliacoesSelecionadas.push(descricao);
-      label.classList.remove('negativo'); // Remove sinalização negativa
-    } else {
-      const index = avaliacoesSelecionadas.indexOf(descricao);
-      if (index > -1) {
-        avaliacoesSelecionadas.splice(index, 1);
-      }
-      label.classList.add('negativo'); // Adiciona sinalização negativa
-    }
-  }
-
-  function salvarAvaliacaoCheckbox() {
-    if (avaliacoesSelecionadas.length > 0) {
-      const dataHora = formatarDataHora();
-      const div = document.createElement('div');
-      div.className = 'hist-item';
-      div.textContent = `📝 Avaliação registrada em ${dataHora}: ${avaliacoesSelecionadas.join(', ')}`;
-      historicoLista.prepend(div);
-      alert('Avaliação salva com sucesso!');
-      document.getElementById('form-avaliacao').reset(); // Reseta os checkboxes
-      avaliacoesSelecionadas.length = 0; // Limpa o array
-    } else {
-      alert('Por favor, selecione pelo menos um item para avaliar.');
-    }
-  }
-</script>
+    <h2>Avaliação do Show</h2>
+    <form id="form-avaliacao">
+      <label>
+        <input type="checkbox" onchange="registrarAvaliacao(this, 'Coreografia alinhada')"> Coreografia alinhada
+      </label><br>
+      <label>
+        <input type="checkbox" onchange="registrarAvaliacao(this, 'Sincronia')"> Sincronia
+      </label><br>
+      <label>
+        <input type="checkbox" onchange="registrarAvaliacao(this, 'Organização final')"> Organização final
+      </label><br>
+      <label>
+        <input type="checkbox" onchange="registrarAvaliacao(this, 'Desempenho na coreografia')"> Desempenho na coreografia
+      </label>
+    </form>
+    <button onclick="salvarAvaliacaoCheckbox()" style="margin-top: 10px; background: #0f0; color: #000; font-weight: bold; padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer;">Salvar Avaliação</button>
+  </div>
 
   <script>
     const clock = document.getElementById('clock');
     const historicoLista = document.getElementById('historico-lista');
     const totalOk = document.getElementById('total-ok');
     const totalFaltando = document.getElementById('total-faltando');
+    const avaliacoesSelecionadas = [];
 
-    // Relógio digital
     function atualizarRelogio() {
       const agora = new Date();
       const hora = agora.toLocaleTimeString('pt-BR');
@@ -226,7 +193,6 @@
     setInterval(atualizarRelogio, 1000);
     atualizarRelogio();
 
-    // Formatador de data e hora
     function formatarDataHora() {
       const agora = new Date();
       return agora.toLocaleString('pt-BR', {
@@ -235,7 +201,6 @@
       });
     }
 
-    // Histórico
     function registrar(checkbox) {
       const item = checkbox.closest('li');
       item.classList.remove('not-found');
@@ -280,21 +245,49 @@
       totalFaltando.textContent = `Itens não encontrados: ${faltando}`;
     }
 
+    function registrarAvaliacao(checkbox, descricao) {
+      const label = checkbox.parentElement;
+      if (checkbox.checked) {
+        avaliacoesSelecionadas.push(descricao);
+        label.classList.remove('negativo');
+      } else {
+        const index = avaliacoesSelecionadas.indexOf(descricao);
+        if (index > -1) {
+          avaliacoesSelecionadas.splice(index, 1);
+        }
+        label.classList.add('negativo');
+      }
+    }
+
+    function salvarAvaliacaoCheckbox() {
+      if (avaliacoesSelecionadas.length > 0) {
+        const dataHora = formatarDataHora();
+        const div = document.createElement('div');
+        div.className = 'hist-item';
+        div.textContent = `📝 Avaliação registrada em ${dataHora}: ${avaliacoesSelecionadas.join(', ')}`;
+        historicoLista.prepend(div);
+        alert('Avaliação salva com sucesso!');
+        document.getElementById('form-avaliacao').reset();
+        avaliacoesSelecionadas.length = 0;
+      } else {
+        alert('Por favor, selecione pelo menos um item para avaliar.');
+      }
+    }
+
     function salvarPDF() {
-  const element = document.body;
-  const opt = {
-    margin:       0.5,
-    filename:     `checklist-figurino-${new Date().toLocaleDateString('pt-BR')}.pdf`,
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2 },
-    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-  };
-
-  html2pdf().from(element).set(opt).save();
-}
-
+      const element = document.body;
+      const opt = {
+        margin: 0.5,
+        filename: `checklist-figurino-${new Date().toLocaleDateString('pt-BR')}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      html2pdf().from(element).set(opt).save();
+    }
   </script>
+
   <hr>
-  <a href="indexo2.html"><h2>Proximo</h2></a>
+  <a href="indexo2.html"><h2>Próximo</h2></a>
 </body>
 </html>
